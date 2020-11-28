@@ -1,3 +1,7 @@
+if (!window.localStorage.getItem('token')) {
+    window.location.href = 'splash.html';
+}
+
 fetch('http://localhost:3000/login', {
     headers: {
         'authorization': 'JWT ' + window.localStorage.getItem('token')
