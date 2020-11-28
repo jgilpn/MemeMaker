@@ -1,19 +1,31 @@
 $(document).ready(function() {
-    const fonts = [
-        "Comic Sans MS", "Stencil", "Courier", "Century", "Helvetica"
+    // POST/upload add attribute 'token'
+    $('form').submit((e) => {
+        $("<input />")
+            .attr("type", "hidden")
+            .attr("name", "token")
+            .attr("value", window.localStorage.getItem("token"))
+            .appendTo('form');
+        return true;
+    })
+
+    const FONTS = [
+        "Comic Sans MS", "Stencil", "Lucida Console", "Century", "Impact",
+        "Georgia", "Arial Black", "Roboto", "Poppins"
     ];
     const fontSelector = document.querySelector("#font-family");
-    for (let i=0; i<fonts.length; i++) {
+    for (let i=0; i<FONTS.length; i++) {
         let option = document.createElement("option")
-        option.innerHTML = fonts[i];
+        option.innerHTML = FONTS[i];
         fontSelector.appendChild(option);
     }
 
     const canvas = document.querySelector("#canvas");
     let context = canvas.getContext("2d");
-    context.textAlign = "center";
     let img = new Image;
     img.onload = () => {
+        let scale = canvas.width / img.width;
+        canvas.height = img.height * scale;
         context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
     }
     let imgSRC = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6s3P7SL6RBFEs5vDueWQcsrnrBczR17jNng&usqp=CAU";
@@ -76,6 +88,7 @@ $(document).ready(function() {
         }
         context.font = `${fontSize}px ${fontFamily}`;
         context.fillStyle = textColor;
+        context.textAlign = "center";
         wrapText(context, text, canvas.width*0.5, y, canvas.width, fontSize*1.05);
     }
 

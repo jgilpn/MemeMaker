@@ -110,38 +110,50 @@
 
                 <div class="col-sm-6">
                     <form
-                        class="mt-5 mx-4"
-                        action="/upload"
+                        class="mt-4 mx-4"
+                        action="https://mememaker-backend.herokuapp.com/memes"
                         method="POST"
                         enctype="multipart/form-data"
                     >
-                        <div class="form-group">
-                            <label class="mr-2" for="input-files">Image:</label>
-                            <input
-                                type="file"
-                                name="file"
-                                id="input-files"
-                                class="btn form-control-file border"
-                            />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="input-text">Text:</label>
-                            <textarea
-                                id="input-text"
-                                class="form-control"
-                                rows="1"
-                            ></textarea>
-                        </div>
-
-                        <div class="form-group d-flex justify-content-center">
-                            <span class="mx-1 d-flex flex-column justify-content-center">
-                                <label for="font-family">Font:</label>
-                                <select id="font-family"></select>
+                        <div class="form-group d-flex">
+                            <span class="col-12">
+                                <label class="mr-2" for="input-files">Image:</label>
+                                <input
+                                    type="file"
+                                    name="file"
+                                    id="input-files"
+                                    class="btn form-control-file border"
+                                />
                             </span>
-                            <span class="mx-1 d-flex flex-column justify-content-center">
+                        </div>
+
+                        <div class="form-group d-flex justify-content-between">
+                            <span class="col-9">
+                                <label for="input-text">Text:</label>
+                                <textarea
+                                    id="input-text"
+                                    class="form-control"
+                                    rows="1"
+                                ></textarea>
+                            </span>
+                            <span class="col-3">
+                                <label for="text-color">Color:</label>
+                                <input
+                                    id="text-color"
+                                    type="color"
+                                    class="form-control"
+                                />
+                            </span>
+                        </div>
+
+                        <div class="form-group d-flex justify-content-between">
+                            <span class="col-4">
+                                <label for="font-family">Font:</label>
+                                <select id="font-family" class="form-control"></select>
+                            </span>
+                            <span class="col-4">
                                 <label for="font-size">Size:</label>
-                                <select id="font-size">
+                                <select id="font-size" class="form-control">
                                     <option>10</option>
                                     <option>12</option>
                                     <option selected>14</option>
@@ -152,28 +164,24 @@
                                     <option>48</option>
                                 </select>
                             </span>
-                            <span class="mx-1 d-flex flex-column justify-content-center">
-                                <label for="text-color">Color:</label>
-                                <input
-                                    id="text-color"
-                                    type="color"
-                                />
-                            </span>
-                            <span class="mx-1 d-flex flex-column justify-content-center">
+                            <span class="col-4">
                                 <label for="v-align">Align:</label>
-                                <select id="v-align">
+                                <select id="v-align" class="form-control">
                                     <option selected>Top</option>
                                     <option>Center</option>
                                     <option>Bottom</option>
                                 </select>
                             </span>
                         </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <button type="button" class="btn btn-secondary w-100 mt-5" id="enter-text">
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary form-control" id="enter-text">
                                 Enter Text
                             </button>
+                        </div>
+                        <div class="form-group">
                             <!-- <button type="submit" class="btn btn-primary w-50 mt-2">Save</button> -->
-                            <button type="button" class="btn btn-primary w-100 mt-2">Save</button>
+                            <button type="submit" class="btn btn-primary form-control">Save</button>
                         </div>
                         
                     </form>

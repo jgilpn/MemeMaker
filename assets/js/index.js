@@ -8,7 +8,9 @@ if (window.localStorage.getItem('token')) {
         .then(data => {
             if (data.username) {
                 // Display username
-                document.querySelector('#username').innerHTML = data.username;
+                if (document.querySelector('#username')) {
+                    document.querySelector('#username').innerHTML = data.username;
+                }
             } else {
                 // No token --> Back to SPLASH page
                 window.location.href = 'splash.html';
