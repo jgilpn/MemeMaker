@@ -21,7 +21,7 @@ document.querySelector('#signup').addEventListener('click', (e) => {
         if (psw === pswconfirm) {
             // SIGNUP function
             loader.style.display = "block";
-            fetch('http://localhost:3000/signup', {
+            fetch('https://mememaker-backend.herokuapp.com/signup', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

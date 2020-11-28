@@ -6,7 +6,7 @@ document.querySelector('#login').addEventListener('click', (e) => {
     loader.style.display = "block";
 
     // LOGIN function
-    fetch('http://localhost:3000/login', {
+    fetch('https://mememaker-backend.herokuapp.com/login', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
