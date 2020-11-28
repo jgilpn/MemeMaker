@@ -1,3 +1,5 @@
+window.localStorage.clear();
+
 document.querySelector('#login').addEventListener('click', (e) => {
     // Display loading circle
     let loader = document.querySelector('.loading');
@@ -31,4 +33,4 @@ document.querySelector('#login').addEventListener('click', (e) => {
             }
         })
         .catch(err => console.log(err));
-})
+});

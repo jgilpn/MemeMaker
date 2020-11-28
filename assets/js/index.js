@@ -18,10 +18,3 @@ fetch('http://localhost:3000/login', {
         }
     })
     .catch(err => console.log(err));
-
-
-// LOGOUT function
-document.querySelector('#logout').addEventListener('click', function() {
-    window.localStorage.clear();
-    window.location.href = 'splash.html';
-})
