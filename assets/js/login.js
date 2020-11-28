@@ -1,7 +1,7 @@
 document.querySelector('#login').addEventListener('click', (e) => {
     // Display loading circle
     let loader = document.querySelector('.loading');
-    let message = document.querySelector('#error-message')
+    let message = document.querySelector('.error-message')
     message.style.display = "none";
     loader.style.display = "block";
 
