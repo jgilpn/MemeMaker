@@ -1,5 +1,5 @@
 if (window.localStorage.getItem('token')) {
-    fetch('https://mememaker-backend.herokuapp.com/login', {
+    fetch('http://localhost:3000/login', {
         headers: {
             'authorization': 'JWT ' + window.localStorage.getItem('token')
         }
@@ -10,6 +10,8 @@ if (window.localStorage.getItem('token')) {
                 // Display username
                 if (document.querySelector('#username')) {
                     document.querySelector('#username').innerHTML = data.username;
+                    window.localStorage.setItem('uid', data.uid);
+                    window.localStorage.setItem('username', data.username);
                 }
             } else {
                 // No token --> Back to SPLASH page
