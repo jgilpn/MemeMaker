@@ -1,6 +1,4 @@
 const collection = document.querySelector('#collection');
-const username = window.localStorage.getItem('username');
-const uid = window.localStorage.getItem('uid');
 
 function formatTags(tags) {
     formattedTags = "";
@@ -11,12 +9,23 @@ function formatTags(tags) {
 }
 
 let memeIDs = [];
+let users;
 
-fetch('https://mememaker-backend.herokuapp.com/memes/' + uid, {
+fetch('https://mememaker-backend.herokuapp.com/users', {
     headers: {
         'authorization': 'JWT ' + window.localStorage.getItem('token')
     }
 })
+    .then(info => info.json())
+    .then(data => {
+        users = data;
+
+        return fetch('https://mememaker-backend.herokuapp.com/memes', {
+            headers: {
+                'authorization': 'JWT ' + window.localStorage.getItem('token')
+            }
+        })
+    })
     .then(info => info.json())
     .then(data => {
 
@@ -31,6 +40,14 @@ fetch('https://mememaker-backend.herokuapp.com/memes/' + uid, {
             // Format hashtags
             let tags = formatTags(meme.tags.split(','));
 
+            let uploaderID = meme.uploaderID;
+            let uploader;
+            for (let j=0; j<users.length; j++) {
+                if (users[j].id === uploaderID) {
+                    uploader = users[j].username;
+                }
+            }
+
             memeIDs.push(meme.id);
             
             collection.innerHTML += `
@@ -40,7 +57,7 @@ fetch('https://mememaker-backend.herokuapp.com/memes/' + uid, {
                             <img id="meme${meme.id}" src="" alt="Image" class="img-thumbnail" style="display:none">
                         </a>
                         <div class="post-text">
-                            <span class="post-meta">${dateformat.format(datetime)} &bullet; By <a href="#">${username}</a></span>
+                            <span class="post-meta">${dateformat.format(datetime)} &bullet; By <a href="#">${uploader}</a></span>
                             <p>${tags}</p>
                             <div class="d-flex">
                                 <p class="mr-4"><a href="#" class="readmore">Add to Favorites</a></p>
@@ -53,6 +70,7 @@ fetch('https://mememaker-backend.herokuapp.com/memes/' + uid, {
         }
 
     })
+    .catch(err => console.log(err))
     .catch(err => console.log(err));
 
 
