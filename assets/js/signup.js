@@ -6,7 +6,8 @@ function validPassword(password) {
     return false;
 }
 
-document.querySelector('#signup').addEventListener('click', (e) => {
+$('form').submit((e) => {
+    e.preventDefault();
     // Display loading circle
     let loader = document.querySelector('.loading');
     let message = document.querySelector('.error-message');
