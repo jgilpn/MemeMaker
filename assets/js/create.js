@@ -29,7 +29,7 @@ $(document).ready(function() {
         canvas.height = img.height * scale;
         context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
     }
-    let imgSRC = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6s3P7SL6RBFEs5vDueWQcsrnrBczR17jNng&usqp=CAU";
+    let imgSRC = "https://img.icons8.com/fluent/480/000000/doge.png";
     img.src = imgSRC;
 
     let imageToCanvas = (input) => {
@@ -151,7 +151,7 @@ $(document).ready(function() {
         message.innerHTML = "";
         loader.style.display = "block";
 
-        fetch('http://localhost:3000/memes', {
+        fetch('https://mememaker-backend.herokuapp.com/memes', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
