@@ -109,18 +109,12 @@
                 </div>
 
                 <div class="col-sm-6">
-                    <form
-                        class="mt-4 mx-4"
-                        action="https://mememaker-backend.herokuapp.com/memes"
-                        method="POST"
-                        enctype="multipart/form-data"
-                    >
+                    <form class="php-email-form mt-4">
                         <div class="form-group d-flex">
                             <span class="col-12">
                                 <label class="mr-2" for="input-files">Image:</label>
                                 <input
                                     type="file"
-                                    name="file"
                                     id="input-files"
                                     class="btn form-control-file border"
                                 />
@@ -189,6 +183,10 @@
                                 autocomplete="off"
                             />
                             <div class="tag-container"></div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="loading">Loading</div>
+                            <div class="error-message"></div>
                         </div>
                         <div class="form-group col-12">
                             <!-- <button type="submit" class="btn btn-primary w-50 mt-2">Save</button> -->

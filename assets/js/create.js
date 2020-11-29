@@ -1,13 +1,4 @@
 $(document).ready(function() {
-    // POST/upload add attribute 'token'
-    $('form').submit((e) => {
-        $("<input />")
-            .attr("type", "hidden")
-            .attr("name", "token")
-            .attr("value", window.localStorage.getItem("token"))
-            .appendTo('form');
-        return true;
-    })
 
     $(document).ready(function() {
         $(window).keydown(function(event){
@@ -32,6 +23,7 @@ $(document).ready(function() {
     const canvas = document.querySelector("#canvas");
     let context = canvas.getContext("2d");
     let img = new Image;
+    img.crossOrigin = 'anonymous';
     img.onload = () => {
         let scale = canvas.width / img.width;
         canvas.height = img.height * scale;
@@ -135,5 +127,55 @@ $(document).ready(function() {
                 });
             }
         }
+    });
+
+    function getFilename() {
+        let file = document.querySelector('#input-files').value;
+        let filename = 'meme.png';
+        if (file) {
+            filename = file.split('\\')[2];
+            filename = filename.replace(/\.[a-zA-Z]+$/i,".png");
+        }
+        return `${Date.now()}-mememaker-${filename}`
+    }
+
+    // POST/upload add attribute 'token'
+    $('form').submit((e) => {
+        e.preventDefault();
+
+        // Display loading circle
+        let loader = document.querySelector('.loading');
+        let message = document.querySelector('.error-message')
+        message.classList.remove('sent-message');
+        message.style.display = "none";
+        message.innerHTML = "";
+        loader.style.display = "block";
+
+        fetch('http://localhost:3000/memes', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'authorization': 'JWT ' + window.localStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                tags: tagsArray.toString(),
+                filename: getFilename(),
+                image: canvas.toDataURL()
+            })
+        })
+            .then(info => {
+                if (info.ok) {
+                    message.classList.add('sent-message');
+                }
+                return info.json();
+            })
+            .then(data => {
+                loader.style.display = "none";
+                // Display status of upload
+                message.innerHTML = data.message;
+                message.style.display = "block";
+            })
+            .catch(err => console.log(err));
     });
 });
