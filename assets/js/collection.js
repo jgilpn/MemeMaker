@@ -12,13 +12,14 @@ function formatTags(tags) {
 
 let memeIDs = [];
 
-fetch('http://localhost:3000/memes/' + uid, {
+fetch('https://mememaker-backend.herokuapp.com/memes/' + uid, {
     headers: {
         'authorization': 'JWT ' + window.localStorage.getItem('token')
     }
 })
     .then(info => info.json())
     .then(data => {
+
         for (let i=0; i<data.length; i++) {
             const meme = data[i];
 
@@ -36,7 +37,7 @@ fetch('http://localhost:3000/memes/' + uid, {
                 <div class="col-md-4">
                     <div class="post-entry">
                         <a href="#" class="d-block mb-4">
-                            <img src="data:image/png;base64,${meme.image}" alt="Image" class="img-thumbnail">
+                            <img id="meme${meme.id}" src="" alt="Image" class="img-thumbnail">
                         </a>
                         <div class="post-text">
                             <span class="post-meta">${dateformat.format(datetime)} &bullet; By <a href="#">${username}</a></span>
@@ -54,22 +55,42 @@ fetch('http://localhost:3000/memes/' + uid, {
     })
     .catch(err => console.log(err));
 
-// setTimeout(() => {
-//     for (let i=0; i<memeIDs.length; i++) {
-//         console.log(memeIDs[i]);
-//         fetch('http://localhost:3000/meme/' + memeIDs[i], {
-//             headers: {
-//                 'authorization': 'JWT ' + window.localStorage.getItem('token')
-//             }
-//         })
-//             .then(info => info.json())
-//             .then(data => {
-//                 console.log(data);
-//             })
-//             .catch(err => console.log(err));
-//     }
-// }, 500);
 
-
-
-
+setTimeout(() => {
+    for (let i=0; i<memeIDs.length; i++) {
+        fetch('https://mememaker-backend.herokuapp.com/meme/' + memeIDs[i], {
+            headers: {
+                'authorization': 'JWT ' + window.localStorage.getItem('token')
+            }
+        })
+            // Retrieve its body as ReadableStream
+            .then(response => {
+                const reader = response.body.getReader();
+                return new ReadableStream({
+                    start(controller) {
+                        return pump();
+                        function pump() {
+                            return reader.read().then(({ done, value }) => {
+                                // When no more data needs to be consumed, close the stream
+                                if (done) {
+                                    controller.close();
+                                    return;
+                                }
+                                // Enqueue the next data chunk into our target stream
+                                controller.enqueue(value);
+                                return pump();
+                            });
+                        }
+                    }  
+                })
+            })
+            .then(stream => new Response(stream))
+            .then(response => response.blob())
+            .then(blob => URL.createObjectURL(blob))
+            .then(url => {
+                let img = document.querySelector(`#meme${memeIDs[i]}`);
+                img.src = url;
+            })
+            .catch(err => console.error(err));
+    }
+}, 1000);
