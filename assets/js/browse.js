@@ -10,8 +10,6 @@ function formatTags(tags) {
 
 let memeIDs = [];
 let users;
-let promiseCount = 0;
-let memeCount = 0;
 
 const getMemes = (query) => {
     if (query) {
@@ -19,6 +17,8 @@ const getMemes = (query) => {
     } else {
         query = ''
     }
+    let promiseCount = 0;
+    let memeCount = 0;
     return fetch('https://mememaker-backend.herokuapp.com/memes' + query, {
         headers: {
             'authorization': 'JWT ' + window.localStorage.getItem('token')
@@ -139,7 +139,7 @@ tagQuery.addEventListener('keyup', (e) => {
         p.classList.add('tag');
 
         collection.innerHTML = '';
-        getMemes(tagQuery);
+        getMemes(tagQuery.value);
         
         tagQuery.value = '';
 
