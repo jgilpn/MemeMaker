@@ -9,6 +9,15 @@ $(document).ready(function() {
         return true;
     })
 
+    $(document).ready(function() {
+        $(window).keydown(function(event){
+            if(event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+
     const FONTS = [
         "Comic Sans MS", "Stencil", "Lucida Console", "Century", "Impact",
         "Georgia", "Arial Black", "Roboto", "Poppins"
@@ -101,4 +110,30 @@ $(document).ready(function() {
         setTimeout(displayText, 100);
     });
 
+    const tags = document.querySelector('#tags');
+    const tagContainer = document.querySelector('.tag-container');
+    let tagsArray = [];
+
+    tags.addEventListener('keyup', (e) => {
+        if ((e.key === 'Enter' || e.keyCode === 13) && tags.value.length > 0) {
+            if (!tagsArray.includes(tags.value)) {
+                tagsArray.push(tags.value);
+                let text = document.createTextNode(tags.value);
+                let p = document.createElement('p');
+                tagContainer.appendChild(p);
+                p.appendChild(text);
+                p.classList.add('tag');
+            }
+            
+            tags.value = '';
+            
+            let deleteTags = document.querySelectorAll('.tag');
+            
+            for(let i = 0; i < deleteTags.length; i++) {
+                deleteTags[i].addEventListener('click', () => {
+                    tagContainer.removeChild(deleteTags[i]);
+                });
+            }
+        }
+    });
 });

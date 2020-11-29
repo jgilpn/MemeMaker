@@ -134,6 +134,7 @@
                                     id="input-text"
                                     class="form-control"
                                     rows="1"
+                                    autocomplete="off"
                                 ></textarea>
                             </span>
                             <span class="col-3">
@@ -174,16 +175,25 @@
                             </span>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group col-12">
                             <button type="button" class="btn btn-secondary form-control" id="enter-text">
-                                Enter Text
+                                Insert Text
                             </button>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-12">
+                            <label for="tags">Tags: <div>(type a keyword & press enter)</div></label>
+                            <input 
+                                id="tags"
+                                type="text"
+                                class="form-control"
+                                autocomplete="off"
+                            />
+                            <div class="tag-container"></div>
+                        </div>
+                        <div class="form-group col-12">
                             <!-- <button type="submit" class="btn btn-primary w-50 mt-2">Save</button> -->
                             <button type="submit" class="btn btn-primary form-control">Save</button>
                         </div>
-                        
                     </form>
                 </div>
             </div>
