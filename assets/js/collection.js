@@ -11,6 +11,9 @@ function formatTags(tags) {
 }
 
 let memeIDs = [];
+let users;
+let promiseCount = 0;
+let memeCount = 0;
 
 fetch('https://mememaker-backend.herokuapp.com/memes/' + uid, {
     headers: {
@@ -36,7 +39,7 @@ fetch('https://mememaker-backend.herokuapp.com/memes/' + uid, {
             collection.innerHTML += `
                 <div class="col-md-4">
                     <div class="post-entry">
-                        <a href="#" class="d-block mb-4">
+                        <a href="" class="d-block mb-4">
                             <img id="meme${meme.id}" src="" alt="Image" class="img-thumbnail" style="display:none">
                         </a>
                         <div class="post-text">
@@ -51,47 +54,45 @@ fetch('https://mememaker-backend.herokuapp.com/memes/' + uid, {
                 </div>
             `
         }
-
+        const promises = [];
+        for (let i=0; i<memeIDs.length; i++) {
+            promises.push(fetch('https://mememaker-backend.herokuapp.com/meme/' + memeIDs[i], {
+                headers: {
+                    'authorization': 'JWT ' + window.localStorage.getItem('token')
+                }
+            }));
+        }
+        return Promise.all(promises);
     })
-    .catch(err => console.log(err));
-
-
-setTimeout(() => {
-    for (let i=0; i<memeIDs.length; i++) {
-        fetch('https://mememaker-backend.herokuapp.com/meme/' + memeIDs[i], {
-            headers: {
-                'authorization': 'JWT ' + window.localStorage.getItem('token')
-            }
-        })
-            // Retrieve its body as ReadableStream
-            .then(response => {
-                const reader = response.body.getReader();
-                return new ReadableStream({
-                    start(controller) {
-                        return pump();
-                        function pump() {
-                            return reader.read().then(({ done, value }) => {
-                                // When no more data needs to be consumed, close the stream
-                                if (done) {
-                                    controller.close();
-                                    return;
-                                }
-                                // Enqueue the next data chunk into our target stream
-                                controller.enqueue(value);
-                                return pump();
-                            });
+    // Retrieve its body as ReadableStream
+    .then(response => {
+        const reader = response[promiseCount++].body.getReader();
+        return new ReadableStream({
+            start(controller) {
+                return pump();
+                function pump() {
+                    return reader.read().then(({ done, value }) => {
+                        // When no more data needs to be consumed, close the stream
+                        if (done) {
+                            controller.close();
+                            return;
                         }
-                    }  
-                })
-            })
-            .then(stream => new Response(stream))
-            .then(response => response.blob())
-            .then(blob => URL.createObjectURL(blob))
-            .then(url => {
-                let img = document.querySelector(`#meme${memeIDs[i]}`);
-                img.src = url;
-                img.style.display = "block";
-            })
-            .catch(err => console.error(err));
-    }
-}, 1000);
+                        // Enqueue the next data chunk into our target stream
+                        controller.enqueue(value);
+                        return pump();
+                    });
+                }
+            }  
+        })
+    })
+    .then(stream => new Response(stream))
+    .then(response => response.blob())
+    .then(blob => URL.createObjectURL(blob))
+    .then(url => {
+        let img = document.querySelector(`#meme${memeIDs[memeCount++]}`);
+        img.src = url;
+        img.style.display = "block";
+    })
+    .catch(err => console.error(err))
+    .catch(err => console.log(err))
+    .catch(err => console.log(err));
