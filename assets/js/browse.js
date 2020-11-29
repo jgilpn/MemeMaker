@@ -13,20 +13,16 @@ let users;
 let promiseCount = 0;
 let memeCount = 0;
 
-fetch('https://mememaker-backend.herokuapp.com/users', {
-    headers: {
-        'authorization': 'JWT ' + window.localStorage.getItem('token')
+const getMemes = (query) => {
+    if (query) {
+        query = '/' + query;
+    } else {
+        query = ''
     }
-})
-    .then(info => info.json())
-    .then(data => {
-        users = data;
-
-        return fetch('https://mememaker-backend.herokuapp.com/memes', {
-            headers: {
-                'authorization': 'JWT ' + window.localStorage.getItem('token')
-            }
-        })
+    return fetch('https://mememaker-backend.herokuapp.com/memes' + query, {
+        headers: {
+            'authorization': 'JWT ' + window.localStorage.getItem('token')
+        }
     })
     .then(info => info.json())
     .then(data => {
@@ -111,4 +107,50 @@ fetch('https://mememaker-backend.herokuapp.com/users', {
     })
     .catch(err => console.error(err))
     .catch(err => console.log(err))
-    .catch(err => console.log(err));
+}
+
+fetch('https://mememaker-backend.herokuapp.com/users', {
+    headers: {
+        'authorization': 'JWT ' + window.localStorage.getItem('token')
+    }
+})
+    .then(info => info.json())
+    .then(data => {
+        users = data;
+
+        return getMemes(window.localStorage.getItem('tag'))
+    })
+
+
+// SEARCH BAR CONTROLLER
+let tagQuery = document.querySelector('#query');
+let tagContainer = document.querySelector('.tag-container-single');
+window.localStorage.setItem('tag', tagQuery.value);
+
+tagQuery.addEventListener('keyup', (e) => {
+    if ((e.key === 'Enter' || e.keyCode === 13) && tagQuery.value.length > 0) {
+        
+        window.localStorage.setItem('tag', tagQuery.value);
+        let text = document.createTextNode(tagQuery.value);
+        let p = document.createElement('p');
+        tagContainer.innerHTML = "";
+        tagContainer.appendChild(p);
+        p.appendChild(text);
+        p.classList.add('tag');
+
+        collection.innerHTML = '';
+        getMemes(tagQuery);
+        
+        tagQuery.value = '';
+
+        let deleteTags = document.querySelectorAll('.tag');
+        
+        for(let i = 0; i < deleteTags.length; i++) {
+            deleteTags[i].addEventListener('click', () => {
+                tagContainer.removeChild(deleteTags[i]);
+                window.localStorage.removeItem('tag');
+                window.location.reload();
+            });
+        }
+    }
+});

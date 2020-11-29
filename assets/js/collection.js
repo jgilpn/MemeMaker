@@ -15,7 +15,7 @@ let users;
 let promiseCount = 0;
 let memeCount = 0;
 
-fetch('https://mememaker-backend.herokuapp.com/memes/' + uid, {
+fetch('https://mememaker-backend.herokuapp.com/memes/user/' + uid, {
     headers: {
         'authorization': 'JWT ' + window.localStorage.getItem('token')
     }

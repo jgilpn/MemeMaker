@@ -19,6 +19,9 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
+  <!-- Other CSS File -->
+  <link href="assets/css/canvas.css" rel="stylesheet">
+
   <!-- =======================================================
   * Template Name: SoftLand - v2.1.0
   * Template URL: https://bootstrapmade.com/softland-bootstrap-app-landing-page-template/
@@ -109,12 +112,19 @@
         <section class="section">
             <div class="container">
                 <div class="row mb-5 justify-content-center">
-                    <form action="#" class="col-md-12 search-form">
+                    <div class="col-md-12 search-form">
                         <div class="form-group">
-                          <span class="icon fa fa-search"></span>
-                          <input type="text" class="form-control text-center" placeholder="Search by keyword">
+                            <span class="icon fa fa-search"></span>
+                            <input
+                                id="query" 
+                                type="text" 
+                                class="form-control text-center" 
+                                placeholder="Search by tag"
+                                autocomplete="off"
+                            />
+                            <div class="tag-container-single"></div>
                         </div>
-                    </form>
+                    </div>
                 </div>
 
                 <div id="collection" class="row mb-5">
@@ -163,7 +173,7 @@
     <script src="assets/js/navbarBurger.js"></script>
     <!-- Other JS Files -->
     <script src="assets/js/index.js"></script>
-    <script src="assets/js/displayAllMemes.js"></script>
+    <script src="assets/js/browse.js"></script>
 </body>
 
 </html>

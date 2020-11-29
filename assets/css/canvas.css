@@ -9,6 +9,12 @@ canvas {
   flex-flow: row wrap;
 }
 
+.tag-container-single {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
 .tag {
   pointer-events: none;
   background-color: #2d71a1;
