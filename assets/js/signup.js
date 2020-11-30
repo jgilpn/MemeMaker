@@ -26,7 +26,7 @@ $('form').submit((e) => {
         if (psw === pswconfirm) {
             // SIGNUP function
             loader.style.display = "block";
-            fetch('https://mememaker-backend.herokuapp.com/user', {
+            fetch('https://mememaker-backend.herokuapp.com/api/v1/user', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

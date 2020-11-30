@@ -19,7 +19,7 @@ const getMemes = (query) => {
     }
     let promiseCount = 0;
     let memeCount = 0;
-    return fetch('https://mememaker-backend.herokuapp.com/memes' + query, {
+    return fetch('https://mememaker-backend.herokuapp.com/api/v1/memes' + query, {
         headers: {
             'authorization': 'JWT ' + window.localStorage.getItem('token')
         }
@@ -68,7 +68,7 @@ const getMemes = (query) => {
         }
         const promises = [];
         for (let i=0; i<memeIDs.length; i++) {
-            promises.push(fetch('https://mememaker-backend.herokuapp.com/meme/' + memeIDs[i], {
+            promises.push(fetch('https://mememaker-backend.herokuapp.com/api/v1/meme/' + memeIDs[i], {
                 headers: {
                     'authorization': 'JWT ' + window.localStorage.getItem('token')
                 }
@@ -109,7 +109,7 @@ const getMemes = (query) => {
     .catch(err => console.log(err))
 }
 
-fetch('https://mememaker-backend.herokuapp.com/users', {
+fetch('https://mememaker-backend.herokuapp.com/api/v1/users', {
     headers: {
         'authorization': 'JWT ' + window.localStorage.getItem('token')
     }

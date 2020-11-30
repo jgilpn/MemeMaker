@@ -22,7 +22,7 @@ $('#pswd-form').submit((e) => {
         if (psw === pswconfirm) {
             // UPDATE Password
             loader.style.display = "block";
-            fetch('https://mememaker-backend.herokuapp.com/password/' + psw, {
+            fetch('https://mememaker-backend.herokuapp.com/api/v1/password/' + psw, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -71,7 +71,7 @@ $('#user-form').submit((e) => {
     if (user) {
         // UPDATE Username
         loader.style.display = "block";
-        fetch('https://mememaker-backend.herokuapp.com/username/' + user, {
+        fetch('https://mememaker-backend.herokuapp.com/api/v1/username/' + user, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -135,7 +135,7 @@ $('#delete').submit((e) => {
 
     // DELETE USER
     loader.style.display = "block";
-        fetch('https://mememaker-backend.herokuapp.com/user', {
+        fetch('https://mememaker-backend.herokuapp.com/api/v1/user', {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

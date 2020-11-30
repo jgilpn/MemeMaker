@@ -151,7 +151,7 @@ $(document).ready(function() {
         message.innerHTML = "";
         loader.style.display = "block";
 
-        fetch('https://mememaker-backend.herokuapp.com/memes', {
+        fetch('https://mememaker-backend.herokuapp.com/api/v1/memes', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

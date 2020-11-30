@@ -1,5 +1,5 @@
 if (window.localStorage.getItem('token')) {
-    fetch('https://mememaker-backend.herokuapp.com/user', {
+    fetch('https://mememaker-backend.herokuapp.com/api/v1/user', {
         headers: {
             'authorization': 'JWT ' + window.localStorage.getItem('token')
         }

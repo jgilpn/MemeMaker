@@ -7,7 +7,7 @@ $('form').submit((e) => {
     loader.style.display = "block";
 
     // LOGIN function
-    fetch('https://mememaker-backend.herokuapp.com/login', {
+    fetch('https://mememaker-backend.herokuapp.com/api/v1/login', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

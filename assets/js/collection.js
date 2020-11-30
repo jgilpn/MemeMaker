@@ -15,7 +15,7 @@ let users;
 let promiseCount = 0;
 let memeCount = 0;
 
-fetch('https://mememaker-backend.herokuapp.com/memes/user/' + uid, {
+fetch('https://mememaker-backend.herokuapp.com/api/v1/memes/user/' + uid, {
     headers: {
         'authorization': 'JWT ' + window.localStorage.getItem('token')
     }
@@ -56,7 +56,7 @@ fetch('https://mememaker-backend.herokuapp.com/memes/user/' + uid, {
         }
         const promises = [];
         for (let i=0; i<memeIDs.length; i++) {
-            promises.push(fetch('https://mememaker-backend.herokuapp.com/meme/' + memeIDs[i], {
+            promises.push(fetch('https://mememaker-backend.herokuapp.com/api/v1/meme/' + memeIDs[i], {
                 headers: {
                     'authorization': 'JWT ' + window.localStorage.getItem('token')
                 }
