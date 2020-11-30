@@ -12,8 +12,6 @@ function formatTags(tags) {
 
 let memeIDs = [];
 let users;
-let promiseCount = 0;
-let memeCount = 0;
 
 fetch('https://mememaker-backend.herokuapp.com/api/v1/memes/user/' + uid, {
     headers: {
@@ -61,34 +59,22 @@ fetch('https://mememaker-backend.herokuapp.com/api/v1/memes/user/' + uid, {
         return Promise.all(promises);
     })
     // Retrieve its body as ReadableStream
-    .then(response => {
-        const reader = response[promiseCount++].body.getReader();
-        return new ReadableStream({
-            start(controller) {
-                return pump();
-                function pump() {
-                    return reader.read().then(({ done, value }) => {
-                        // When no more data needs to be consumed, close the stream
-                        if (done) {
-                            controller.close();
-                            return;
-                        }
-                        // Enqueue the next data chunk into our target stream
-                        controller.enqueue(value);
-                        return pump();
-                    });
-                }
-            }  
-        })
+    .then(responses => {
+        const blobRes = [];
+        responses.forEach(res => {
+            blobRes.push(res.blob());
+        });
+        return Promise.all(blobRes);
     })
-    .then(stream => new Response(stream))
-    .then(response => response.blob())
-    .then(blob => URL.createObjectURL(blob))
-    .then(url => {
-        let img = document.querySelector(`#meme${memeIDs[memeCount++]}`);
-        img.src = url;
-        img.style.display = "block";
+    .then(blobs => {
+        let memeCount = 0;
+        const urlCreator = window.URL || window.webkitURL;
+        blobs.forEach(blob => {
+            let url = urlCreator.createObjectURL(blob);
+            let img = document.querySelector(`#meme${memeIDs[memeCount++]}`);
+            img.src = url;
+            img.style.display = "block";
+        });
     })
     .catch(err => console.error(err))
     .catch(err => console.log(err))
-    .catch(err => console.log(err));

@@ -8,17 +8,16 @@ function formatTags(tags) {
     return formattedTags;
 }
 
-let memeIDs = [];
 let users;
 
 const getMemes = (query) => {
+    let memeIDs = [];
+    collection.innerHTML = ''
     if (query) {
         query = query;
     } else {
         query = ''
     }
-    let promiseCount = 0;
-    let memeCount = 0;
     return fetch('https://mememaker-backend.herokuapp.com/api/v1/memes' + query, {
         headers: {
             'authorization': 'JWT ' + window.localStorage.getItem('token')
@@ -26,7 +25,6 @@ const getMemes = (query) => {
     })
     .then(info => info.json())
     .then(data => {
-
         for (let i=0; i<data.length; i++) {
             const meme = data[i];
 
@@ -73,33 +71,22 @@ const getMemes = (query) => {
         return Promise.all(promises);
     })
     // Retrieve its body as ReadableStream
-    .then(response => {
-        const reader = response[promiseCount++].body.getReader();
-        return new ReadableStream({
-            start(controller) {
-                return pump();
-                function pump() {
-                    return reader.read().then(({ done, value }) => {
-                        // When no more data needs to be consumed, close the stream
-                        if (done) {
-                            controller.close();
-                            return;
-                        }
-                        // Enqueue the next data chunk into our target stream
-                        controller.enqueue(value);
-                        return pump();
-                    });
-                }
-            }  
-        })
+    .then(responses => {
+        const blobRes = [];
+        responses.forEach(res => {
+            blobRes.push(res.blob());
+        });
+        return Promise.all(blobRes);
     })
-    .then(stream => new Response(stream))
-    .then(response => response.blob())
-    .then(blob => URL.createObjectURL(blob))
-    .then(url => {
-        let img = document.querySelector(`#meme${memeIDs[memeCount++]}`);
-        img.src = url;
-        img.style.display = "block";
+    .then(blobs => {
+        let memeCount = 0;
+        const urlCreator = window.URL || window.webkitURL;
+        blobs.forEach(blob => {
+            let url = urlCreator.createObjectURL(blob);
+            let img = document.querySelector(`#meme${memeIDs[memeCount++]}`);
+            img.src = url;
+            img.style.display = "block";
+        });
     })
     .catch(err => console.error(err))
     .catch(err => console.log(err))
@@ -113,7 +100,6 @@ fetch('https://mememaker-backend.herokuapp.com/api/v1/users', {
     .then(info => info.json())
     .then(data => {
         users = data;
-
         return getMemes(window.localStorage.getItem('query'))
     })
 
@@ -140,7 +126,6 @@ tagQuery.addEventListener('keyup', (e) => {
         p.classList.add('tag');
         p.classList.add('border-pill');
 
-        collection.innerHTML = '';
         getMemes(`/tag/${tagQuery.value}`);
         
         tagQuery.value = '';
@@ -174,8 +159,6 @@ userQuery.addEventListener('keyup', (e) => {
         p.appendChild(text);
         p.classList.add('tag');
         p.classList.add('border-pill');
-
-        collection.innerHTML = '';
 
         fetch('https://mememaker-backend.herokuapp.com/api/v1/users', {
             headers: {
