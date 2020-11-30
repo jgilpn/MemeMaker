@@ -18,7 +18,11 @@ $('form').submit((e) => {
     // Match Passwords
     const psw = document.querySelector('#password').value;
     const pswconfirm = document.querySelector('#confirm').value;
-    if (validPassword(psw)) {
+    const user = document.querySelector('#username').value.trim();
+    if (!user) {
+        message.innerHTML = "Field cannot be empty.";
+        message.style.display = "block";
+    } else if (validPassword(psw)) {
         if (psw === pswconfirm) {
             // SIGNUP function
             loader.style.display = "block";
@@ -29,7 +33,7 @@ $('form').submit((e) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username: document.querySelector('#username').value,
+                    username: user,
                     password: psw
                 })
             })
