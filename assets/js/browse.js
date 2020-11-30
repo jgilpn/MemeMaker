@@ -13,7 +13,7 @@ let users;
 
 const getMemes = (query) => {
     if (query) {
-        query = '/' + query;
+        query = '/tag/' + query;
     } else {
         query = ''
     }
