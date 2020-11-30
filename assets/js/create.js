@@ -115,6 +115,7 @@ $(document).ready(function() {
                 tagContainer.appendChild(p);
                 p.appendChild(text);
                 p.classList.add('tag');
+                p.classList.add('border-pill');
             }
             
             tags.value = '';

@@ -133,6 +133,7 @@ tagQuery.addEventListener('keyup', (e) => {
         tagContainer.appendChild(p);
         p.appendChild(text);
         p.classList.add('tag');
+        p.classList.add('border-pill');
 
         collection.innerHTML = '';
         getMemes(tagQuery.value);
