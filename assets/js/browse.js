@@ -51,16 +51,12 @@ const getMemes = (query) => {
             collection.innerHTML += `
                 <div class="col-md-4">
                     <div class="post-entry">
-                        <a href="#" class="d-block mb-4">
+                        <a class="d-block mb-4">
                             <img id="meme${meme.id}" src="" alt="Image" class="img-thumbnail" style="display:none">
                         </a>
                         <div class="post-text">
-                            <span class="post-meta">${dateformat.format(datetime)} &bullet; By <a href="#">${uploader}</a></span>
+                            <span class="post-meta">${dateformat.format(datetime)} &bullet; By <a class="text-dark">${uploader}</a></span>
                             <p>${tags}</p>
-                            <div class="d-flex">
-                                <p class="mr-4"><a href="#" class="readmore">Add to Favorites</a></p>
-                                <p><a href="#" class="readmore">Download</a></p>
-                            </div>
                         </div>
                     </div>
                 </div>
