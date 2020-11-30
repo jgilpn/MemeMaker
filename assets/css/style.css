@@ -660,9 +660,9 @@ section {
   position: relative;
 }
 
-.search-form .form-group input {
+/* .search-form .form-group input {
   padding-right: 50px;
-}
+} */
 
 .search-form .icon {
   position: absolute;

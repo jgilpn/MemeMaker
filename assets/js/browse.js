@@ -13,7 +13,7 @@ let users;
 
 const getMemes = (query) => {
     if (query) {
-        query = '/tag/' + query;
+        query = query;
     } else {
         query = ''
     }
@@ -114,29 +114,34 @@ fetch('https://mememaker-backend.herokuapp.com/api/v1/users', {
     .then(data => {
         users = data;
 
-        return getMemes(window.localStorage.getItem('tag'))
+        return getMemes(window.localStorage.getItem('query'))
     })
 
+// SEARCH CONTROLLERS
 
-// SEARCH BAR CONTROLLER
 let tagQuery = document.querySelector('#query');
-let tagContainer = document.querySelector('.tag-container-single');
-window.localStorage.setItem('tag', tagQuery.value);
+let tagContainer = document.querySelector('#tag-container');
+let userQuery = document.querySelector('#query-user');
+let userContainer = document.querySelector('#user-container');
+let errorMessage = document.querySelector('#error-message');
+window.localStorage.setItem('query', userQuery.value);
 
+// SEARCH BY TAG
 tagQuery.addEventListener('keyup', (e) => {
-    if ((e.key === 'Enter' || e.keyCode === 13) && tagQuery.value.length > 0) {
-        
-        window.localStorage.setItem('tag', tagQuery.value);
+    if ((e.key === 'Enter' || e.keyCode === 13) && tagQuery.value.trim().length > 0) {
+        errorMessage.innerHTML = '';
+        window.localStorage.setItem('query', tagQuery.value);
         let text = document.createTextNode(tagQuery.value);
         let p = document.createElement('p');
         tagContainer.innerHTML = "";
+        userContainer.innerHTML = "";
         tagContainer.appendChild(p);
         p.appendChild(text);
         p.classList.add('tag');
         p.classList.add('border-pill');
 
         collection.innerHTML = '';
-        getMemes(tagQuery.value);
+        getMemes(`/tag/${tagQuery.value}`);
         
         tagQuery.value = '';
 
@@ -145,7 +150,57 @@ tagQuery.addEventListener('keyup', (e) => {
         for(let i = 0; i < deleteTags.length; i++) {
             deleteTags[i].addEventListener('click', () => {
                 tagContainer.removeChild(deleteTags[i]);
-                window.localStorage.removeItem('tag');
+                window.localStorage.removeItem('query');
+                window.location.reload();
+            });
+        }
+    }
+});
+
+// SEARCH BY USER
+userQuery.addEventListener('keyup', (e) => {
+    if ((e.key === 'Enter' || e.keyCode === 13) && userQuery.value.trim().length > 0) {
+        if (userQuery.value.split(' ').length > 1) {
+            errorMessage.innerHTML = 'No Spaces Allowed';
+            return;
+        }
+        errorMessage.innerHTML = '';
+        window.localStorage.setItem('query', userQuery.value);
+        let text = document.createTextNode(userQuery.value);
+        let p = document.createElement('p');
+        userContainer.innerHTML = "";
+        tagContainer.innerHTML = "";
+        userContainer.appendChild(p);
+        p.appendChild(text);
+        p.classList.add('tag');
+        p.classList.add('border-pill');
+
+        collection.innerHTML = '';
+
+        fetch('https://mememaker-backend.herokuapp.com/api/v1/users', {
+            headers: {
+                'authorization': 'JWT ' + window.localStorage.getItem('token')
+            }
+        })
+            .then(info => info.json())
+            .then(data => {
+                for (let i=0; i<data.length; i++) {
+                    if (userQuery.value == data[i].username) {
+                        return getMemes(`/user/${data[i].id}`);
+                    }
+                }
+                errorMessage.innerHTML = `${userQuery.value} has not uploaded any memes`;
+                userQuery.value = '';
+                return
+            })
+            .catch(err => console.log(err));
+        
+        let deleteTags = document.querySelectorAll('.tag');
+        
+        for(let i = 0; i < deleteTags.length; i++) {
+            deleteTags[i].addEventListener('click', () => {
+                userContainer.removeChild(deleteTags[i]);
+                window.localStorage.removeItem('query');
                 window.location.reload();
             });
         }

@@ -117,7 +117,7 @@
 
         <section class="section">
             <div class="container">
-                <div class="row mb-5 justify-content-center">
+                <div class="row mb-5">
                     <div class="col-md-12 search-form">
                         <div class="form-group">
                             <input
@@ -127,17 +127,23 @@
                                 placeholder="Search by tag"
                                 autocomplete="off"
                             />
-                            <div class="tag-container-single"></div>
+                            <div id="tag-container" class="tag-container-single"></div>
                         </div>
-                        <span class="center">OR</span>
+                    </div>
+                    <div class="col-md-12 search-form">
+                        <p class="text-center">OR</p>
+                    </div>
+                    <div class="col-md-12 search-form">
                         <div class="form-group">
                             <input
-                                id="queryuser" 
+                                id="query-user" 
                                 type="text" 
                                 class="form-control text-center" 
                                 placeholder="Search by user"
                                 autocomplete="off"
                             />
+                            <div id="user-container" class="tag-container-single"></div>
+                            <p id="error-message" class='text-center text-danger'></p>
                         </div>
                     </div>
                 </div>
